@@ -80,6 +80,9 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       - name: Build the image
         run: docker build -t backend:latest src/backend/
 
@@ -97,12 +100,12 @@ jobs:
 
       - name: Build an image from Dockerfile
         run: |
-          docker build -t docker.io/my-organization/my-app:${{ github.sha }} .
+          docker build -t backend:${{ github.sha }} .
 
       - name: Scan image
         uses: aquasecurity/trivy-action@0.35.0
         with:
-          image-ref: "backend:latest"
+          image-ref: "backend:${{ github.sha }}"
           format: "github"
           output: "dependency-results.sbom.json"
           exit-code: "1"
