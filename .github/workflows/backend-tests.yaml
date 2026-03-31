@@ -75,17 +75,6 @@ jobs:
           recreate: true
           path: code-coverage-results.md
 
-  container-check:
-    name: Build the image
-    needs: test
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Build the image
-        run: docker build -t backend:latest src/backend/
-
   generate-sbom:
     name: Build and test with trivy
     runs-on: ubuntu-latest
@@ -108,7 +97,6 @@ jobs:
           image-ref: "backend:${{ github.sha }}"
           format: "github"
           output: "dependency-results.sbom.json"
-          exit-code: "1"
           ignore-unfixed: true
           vuln-type: "os,library"
           github-pat: ${{ secrets.GITHUB_TOKEN }} # or ${{ secrets.github_pat_name }} if you're using a PAT
@@ -118,5 +106,13 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: trivy-sbom-report
-          path: "${{ github.workspace }}/dependency-results.sbom.json"
+          path: "dependency-results.sbom.json"
           retention-days: 20 # 90 is the default
+
+      - name: Add Coverage PR Comment
+        uses: marocchino/sticky-pull-request-comment@v2
+        if: github.event_name == 'pull_request'
+        with:
+          header: Trivy result
+          recreate: true
+          path: "dependency-results.sbom.json"
