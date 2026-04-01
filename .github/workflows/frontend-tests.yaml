@@ -15,7 +15,7 @@ jobs:
         id: filter
         with:
           filters: |
-            backend:
+            frontend:
               - 'src/frontend/**'
               - '.github/workflows/frontend-tests.yaml'
 
