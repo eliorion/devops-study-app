@@ -16,6 +16,8 @@ from .config import (
     CORS_ALLOW_HEADERS,
 )
 
+# Add comment for triggering ci pipeline
+
 # Configure logging
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
