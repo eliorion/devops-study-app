@@ -17,6 +17,7 @@ from .config import (
 )
 
 # Add comment for triggering ci pipeline
+# Add comment for triggering ci pipeline
 
 # Configure logging
 logging.basicConfig(
